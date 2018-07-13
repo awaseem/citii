@@ -20,3 +20,7 @@ function story(graph: Graph) {
     }
   }
 }
+
+story()
+  .choice()
+  .choice()
