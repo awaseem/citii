@@ -30,7 +30,7 @@ export function story(text: string) {
 }
 
 function choice(storyNode: StoreNode) {
-  return (text: string) => {
+  return (text: string, nextStoryNode?: StoreNode) => {
     const ID = shortID.generate();
     const newStoryNode = {
       ...storyNode,
@@ -38,36 +38,14 @@ function choice(storyNode: StoreNode) {
         ...storyNode.choices,
         {
           ID,
+          next: nextStoryNode,
           text
         }
       ]
     };
     return {
       choice: choice(newStoryNode),
-      continue: continueStory(ID, newStoryNode),
       storyNode: newStoryNode
     };
   };
-}
-
-function continueStory(choiceID: string, storyNode: StoreNode) {
-  return (nextStoryNode: StoreNode) => {
-    const choices = storyNode.choices.map(
-      storyToChoiceBy(choiceID, nextStoryNode)
-    );
-    return {
-      ...storyNode,
-      choices
-    };
-  };
-}
-
-function storyToChoiceBy(choiceID: string, nextStoryNode: StoreNode) {
-  return (choiceNode: ChoiceNode) =>
-    choiceNode.ID === choiceID
-      ? {
-          ...choice,
-          next: nextStoryNode
-        }
-      : choiceNode;
 }
