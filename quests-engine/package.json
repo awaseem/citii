@@ -54,7 +54,6 @@
   "dependencies": {
     "@types/graphlib": "^2.1.4",
     "@types/shortid": "^0.0.29",
-    "graphlib": "^2.1.5",
     "sha.js": "^2.4.11",
     "shortid": "^2.2.12"
   },
