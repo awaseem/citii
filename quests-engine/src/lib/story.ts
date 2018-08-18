@@ -4,6 +4,12 @@ export enum NodeTypes {
   Starting = 'Starting'
 }
 
+export interface Resources {
+  readonly money: number;
+  readonly happiness: number;
+  readonly population: number;
+}
+
 export interface StoreNode {
   readonly ID: string;
   readonly text: string;
@@ -13,6 +19,7 @@ export interface StoreNode {
 export interface ChoiceNode {
   readonly ID: string;
   readonly text: string;
+  readonly resourcesEffected?: Resources;
   readonly next?: StoreNode;
 }
 
@@ -30,7 +37,11 @@ export function story(text: string) {
 }
 
 function choice(storyNode: StoreNode) {
-  return (text: string, nextStoryNode?: StoreNode) => {
+  return (
+    text: string,
+    resourcesEffected?: Resources,
+    nextStoryNode?: StoreNode
+  ) => {
     const ID = shortID.generate();
     const newStoryNode = {
       ...storyNode,
@@ -39,6 +50,7 @@ function choice(storyNode: StoreNode) {
         {
           ID,
           next: nextStoryNode,
+          resourcesEffected,
           text
         }
       ]
