@@ -1,22 +1,18 @@
 import * as shortID from 'shortid';
 
-export enum NodeTypes {
-  Starting = 'Starting'
-}
-
-export interface Resources {
+interface Resources {
   readonly money: number;
   readonly happiness: number;
   readonly population: number;
 }
 
-export interface StoreNode {
+interface StoreNode {
   readonly ID: string;
   readonly text: string;
   readonly choices: ReadonlyArray<ChoiceNode>;
 }
 
-export interface ChoiceNode {
+interface ChoiceNode {
   readonly ID: string;
   readonly text: string;
   readonly resourcesEffected?: Resources;
