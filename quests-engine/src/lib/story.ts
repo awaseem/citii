@@ -8,21 +8,24 @@ export interface Resources {
 
 export interface StoreNode {
   readonly ID: string;
+  readonly imagePath: string;
   readonly text: string;
   readonly choices: ReadonlyArray<ChoiceNode>;
 }
 
 export interface ChoiceNode {
   readonly ID: string;
+  readonly imagePath: string;
   readonly text: string;
   readonly resourcesEffected?: Resources;
   readonly next?: StoreNode;
 }
 
-export function story(text: string) {
+export function story(text: string, imagePath: string) {
   // if there are zero nodes, we need to set one as a starting point for the quest
   const storyNode: StoreNode = {
     ID: shortID.generate(),
+    imagePath,
     choices: [],
     text
   };
@@ -35,6 +38,7 @@ export function story(text: string) {
 function choice(storyNode: StoreNode) {
   return (
     text: string,
+    imagePath: string,
     resourcesEffected?: Resources,
     nextStoryNode?: StoreNode
   ) => {
@@ -47,7 +51,8 @@ function choice(storyNode: StoreNode) {
           ID,
           next: nextStoryNode,
           resourcesEffected,
-          text
+          text,
+          imagePath
         }
       ]
     };
