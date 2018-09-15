@@ -1,18 +1,18 @@
 import * as shortID from 'shortid';
 
-interface Resources {
+export interface Resources {
   readonly money: number;
   readonly happiness: number;
   readonly population: number;
 }
 
-interface StoreNode {
+export interface StoreNode {
   readonly ID: string;
   readonly text: string;
   readonly choices: ReadonlyArray<ChoiceNode>;
 }
 
-interface ChoiceNode {
+export interface ChoiceNode {
   readonly ID: string;
   readonly text: string;
   readonly resourcesEffected?: Resources;
