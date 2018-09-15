@@ -25,8 +25,8 @@ export function story(text: string, imagePath: string) {
   // if there are zero nodes, we need to set one as a starting point for the quest
   const storyNode: StoreNode = {
     ID: shortID.generate(),
-    imagePath,
     choices: [],
+    imagePath,
     text
   };
   return {
@@ -49,10 +49,10 @@ function choice(storyNode: StoreNode) {
         ...storyNode.choices,
         {
           ID,
+          imagePath,
           next: nextStoryNode,
           resourcesEffected,
           text,
-          imagePath
         }
       ]
     };
