@@ -8,8 +8,10 @@
     "test": "jest"
   },
   "dependencies": {
+    "date-fns": "^1.29.0",
     "react": "16.4.1",
-    "react-native": "0.56.0"
+    "react-native": "0.56.0",
+    "redux": "^4.0.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
