@@ -1,3 +1,5 @@
+import { todoByID } from "./todoHelpers";
+
 export interface Todo {
   ID: string;
   text: string;
@@ -68,12 +70,38 @@ export function completeTodo(todoID: string): CompleteTodoAction {
 export function todoListReducer(state: TodoListState = initialTodoListState, action: AddTodoAction | RemoveTodoAction | CompleteTodoAction): TodoListState {
   switch (action.type) {
     case TodoListActions.ADD:
-      break;
+      return addTodoHelper(state, action.payload)
     case TodoListActions.COMPLETE:
-      break;
+      return completeTodoHelper(state, action.payload)
     case TodoListActions.REMOVE:
-      break;
+      return removeTodoHelper(state, action.payload)
     default:
       return state
+  }
+}
+
+// -- Reducer Helpers --
+
+function addTodoHelper(state: TodoListState, todo: Todo): TodoListState {
+  return {
+    ...state,
+    inProgressTodoList: [...state.inProgressTodoList, todo]
+  }
+}
+
+function completeTodoHelper(state: TodoListState, todoID: string): TodoListState {
+  return {
+    inProgressTodoList: state.inProgressTodoList.filter(todoByID(todoID)),
+    completedTodoList: [
+      ...state.completedTodoList, 
+      state.inProgressTodoList.find(todoByID(todoID)) as Todo
+    ]
+  }
+}
+
+function removeTodoHelper(state: TodoListState, todoID: string): TodoListState {
+  return {
+    ...state,
+    inProgressTodoList: state.inProgressTodoList.filter(todoByID(todoID))
   }
 }
