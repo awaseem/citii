@@ -1,4 +1,4 @@
-import { todoByID } from "./todoHelpers";
+import { todoByID, notTodoByID } from "./todoHelpers";
 
 export interface Todo {
   ID: string;
@@ -91,7 +91,7 @@ function addTodoHelper(state: TodoListState, todo: Todo): TodoListState {
 
 function completeTodoHelper(state: TodoListState, todoID: string): TodoListState {
   return {
-    inProgressTodoList: state.inProgressTodoList.filter(todoByID(todoID)),
+    inProgressTodoList: state.inProgressTodoList.filter(notTodoByID(todoID)),
     completedTodoList: [
       ...state.completedTodoList, 
       state.inProgressTodoList.find(todoByID(todoID)) as Todo
@@ -102,6 +102,6 @@ function completeTodoHelper(state: TodoListState, todoID: string): TodoListState
 function removeTodoHelper(state: TodoListState, todoID: string): TodoListState {
   return {
     ...state,
-    inProgressTodoList: state.inProgressTodoList.filter(todoByID(todoID))
+    inProgressTodoList: state.inProgressTodoList.filter(notTodoByID(todoID))
   }
 }

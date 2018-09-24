@@ -12,4 +12,8 @@ describe('todoByID tests', () => {
   it('should work by returning true by the right ID', () => {
     expect(todoByID('test')(testTodo)).toBeTruthy()
   })
+
+  it('should work by returning true by the right ID', () => {
+    expect(todoByID('nope')(testTodo)).toBeFalsy()
+  })
 })
