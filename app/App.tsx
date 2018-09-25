@@ -9,7 +9,11 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, View, ScrollView} from 'react-native';
+import { Header } from './src/components/header';
+import { Subtitle } from './src/components/subtitle';
+import { Hr } from './src/components/hr';
+import { TodoItem } from './src/components/todoItem';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -23,9 +27,20 @@ export default class App extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.tsx</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+        <Header text={'My Tasks'} />
+        <View style={styles.tasksRemainingContainer}>
+          <Subtitle text={'3 tasks remaining'} />
+        </View>
+        <View style={styles.hrContainer}>
+          <Hr />
+        </View>
+        <ScrollView style={styles.todoLists}>
+          <TodoItem todo={{
+            ID: 'some ID',
+            text: 'Buy Milk',
+            timeStarted: new Date()
+          }} />
+        </ScrollView>
       </View>
     );
   }
@@ -34,18 +49,18 @@ export default class App extends Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    marginTop: 120,
+    marginHorizontal: 50,
+    backgroundColor: 'white',
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  tasksRemainingContainer: {
+    paddingVertical: 10
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  hrContainer: {
+    marginRight: -200,
+    paddingTop: 12
   },
+  todoLists: {
+    paddingTop: 20
+  }
 });
