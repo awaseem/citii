@@ -14,7 +14,7 @@ export function Subtitle(props: Props) {
 
 const styles = StyleSheet.create({
   subtitle: {
-    fontSize: 10,
+    fontSize: 14,
     fontWeight: '400',
     color: AppColors.subHeaderColor
   }

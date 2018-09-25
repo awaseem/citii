@@ -14,8 +14,8 @@ export function Header(props: Props) {
 
 const styles = StyleSheet.create({
   header: {
-    fontSize: 30,
-    fontWeight: '700',
+    fontSize: 42,
+    fontWeight: '600',
     color: AppColors.headerColor
   }
 })

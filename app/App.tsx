@@ -9,38 +9,71 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, View, ScrollView} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
+import { SwipeListView } from 'react-native-swipe-list-view';
 import { Header } from './src/components/header';
 import { Subtitle } from './src/components/subtitle';
 import { Hr } from './src/components/hr';
 import { TodoItem } from './src/components/todoItem';
+import { Todo } from './src/data/todos/todolist';
+import { TodoItemBack } from './src/components/todoItemBack';
+import { AppColors } from './src/assets/colors';
+import { Button } from './src/components/button';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+interface SwipeListRenderItem {
+  item: Todo,
+  index: number
+}
 
-interface Props {}
-export default class App extends Component<Props> {
+const todos = [
+  {
+    ID: 'some ID',
+    text: 'Buy Milk',
+    timeStarted: new Date()
+  },
+  {
+    ID: 'some ID 2',
+    text: 'Finish task one',
+    timeStarted: new Date()
+  },
+  {
+    ID: 'some ID 3',
+    text: 'Finish task two because god damn this is a really big ass string',
+    timeStarted: new Date()
+  }
+]
+
+export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header text={'My Tasks'} />
+        <View style={styles.headerContainer}>
+          <Header text={'My Tasks'} />
+        </View>
         <View style={styles.tasksRemainingContainer}>
           <Subtitle text={'3 tasks remaining'} />
         </View>
         <View style={styles.hrContainer}>
           <Hr />
         </View>
-        <ScrollView style={styles.todoLists}>
-          <TodoItem todo={{
-            ID: 'some ID',
-            text: 'Buy Milk',
-            timeStarted: new Date()
-          }} />
-        </ScrollView>
+        <SwipeListView
+            style={styles.todoLists}
+            useFlatList
+            data={todos}
+            renderItem={ ({ item }: SwipeListRenderItem) => (
+              <TodoItem todo={item} />
+            )}
+            renderHiddenItem={ ({ item }: SwipeListRenderItem) => (
+              <TodoItemBack onDelete={() => undefined} onComplete={() => undefined} />
+            )}
+            previewRowKey={''}
+            keyExtractor={(item: Todo) => item.ID}
+            leftOpenValue={75}
+            rightOpenValue={-75}
+        />
+        <View style={styles.buttonContainer}>
+          <Button inverted color={AppColors.addButton} text={'+'} />
+        </View>
       </View>
     );
   }
@@ -49,18 +82,25 @@ export default class App extends Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 120,
-    marginHorizontal: 50,
+    marginTop: 80,
     backgroundColor: 'white',
   },
+  headerContainer: {
+    marginLeft: 50
+  },
   tasksRemainingContainer: {
-    paddingVertical: 10
+    paddingVertical: 10,
+    marginLeft: 50
   },
   hrContainer: {
-    marginRight: -200,
+    marginLeft: 50,
     paddingTop: 12
   },
   todoLists: {
-    paddingTop: 20
+  },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 36,
+    right: 36
   }
 });

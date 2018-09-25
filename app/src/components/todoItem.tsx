@@ -21,15 +21,19 @@ export function TodoItem(props: Props) {
 
 const styles = StyleSheet.create({
   container: {
+    paddingVertical: 20,
+    paddingLeft: 50,
+    paddingRight: 20,
+    backgroundColor: AppColors.todoListItem
   },
   todoText: {
-    fontSize: 14,
+    fontSize: 20,
     fontWeight: '600',
     color: AppColors.headerColor
   },
   dateText: {
     paddingTop: 6,
-    fontSize: 10,
+    fontSize: 14,
     fontWeight: '600',
     color: AppColors.subHeaderColor
   }
