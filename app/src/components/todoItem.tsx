@@ -21,7 +21,7 @@ export function TodoItem(props: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 20,
+    paddingVertical: 16,
     paddingLeft: 50,
     paddingRight: 20,
     backgroundColor: AppColors.todoListItem

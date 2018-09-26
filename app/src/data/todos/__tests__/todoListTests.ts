@@ -12,7 +12,7 @@ const todoListTests = [
   {
     description: 'add todo to list',
     state: undefined as TodoListState,
-    action: addTodo(testTodo),
+    action: addTodo('text'),
     expect: {
       inProgressTodoList: [testTodo] as Todo[],
       completedTodoList: [] as Todo[]
@@ -24,7 +24,7 @@ const todoListTests = [
       inProgressTodoList: [testTodo] as Todo[],
       completedTodoList: [] as Todo[]
     },
-    action: addTodo(testTodo),
+    action: addTodo('text'),
     expect: {
       inProgressTodoList: [testTodo, testTodo] as Todo[],
       completedTodoList: [] as Todo[]
@@ -78,7 +78,8 @@ describe('todoList reducer', () => {
   todoListTests.forEach((test) => {
     it(test.description, () => {
       const actual = todoListReducer(test.state, test.action)
-      expect(actual).toEqual(test.expect)
+      expect(actual.completedTodoList.length).toEqual(test.expect.completedTodoList.length)
+      expect(actual.inProgressTodoList.length).toEqual(test.expect.inProgressTodoList.length)
     })
   })
 })

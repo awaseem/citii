@@ -1,4 +1,5 @@
 import { todoByID, notTodoByID } from "./todoHelpers";
+import shortID from 'shortid'
 
 export interface Todo {
   ID: string;
@@ -44,10 +45,14 @@ export const initialTodoListState: TodoListState = {
 
 // -- Action Creators --
 
-export function addTodo(todo: Todo): AddTodoAction {
+export function addTodo(text: string): AddTodoAction {
   return {
     type: TodoListActions.ADD,
-    payload: todo
+    payload: {
+      ID: shortID.generate(),
+      text,
+      timeStarted: new Date()
+    }
   }
 }
 
@@ -93,8 +98,11 @@ function completeTodoHelper(state: TodoListState, todoID: string): TodoListState
   return {
     inProgressTodoList: state.inProgressTodoList.filter(notTodoByID(todoID)),
     completedTodoList: [
-      ...state.completedTodoList, 
-      state.inProgressTodoList.find(todoByID(todoID)) as Todo
+      ...state.completedTodoList,
+      {
+        ...state.inProgressTodoList.find(todoByID(todoID)) as Todo,
+        timeEnded: new Date()
+      }
     ]
   }
 }
