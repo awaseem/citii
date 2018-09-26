@@ -3,14 +3,15 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { AppColors } from '../assets/colors';
 
 interface Props {
-  text: string
-  color: string
-  inverted: boolean
+  text: string,
+  color: string,
+  inverted: boolean,
+  onPress: () => void
 }
 
 export function Button(props: Props) {
   return (
-    <TouchableOpacity style={[styles.button, { 
+    <TouchableOpacity onPress={props.onPress} style={[styles.button, { 
       backgroundColor: props.color
     }]}>
       <Text style={[

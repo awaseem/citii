@@ -9,98 +9,20 @@
  */
 
 import React, {Component} from 'react';
-import {StyleSheet, View} from 'react-native';
-import { SwipeListView } from 'react-native-swipe-list-view';
-import { Header } from './src/components/header';
-import { Subtitle } from './src/components/subtitle';
-import { Hr } from './src/components/hr';
-import { TodoItem } from './src/components/todoItem';
-import { Todo } from './src/data/todos/todolist';
-import { TodoItemBack } from './src/components/todoItemBack';
-import { AppColors } from './src/assets/colors';
-import { Button } from './src/components/button';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import { todoListReducer } from './src/data/todos/todoList';
 
-interface SwipeListRenderItem {
-  item: Todo,
-  index: number
-}
+import InProgressListContainer from './src/container/inprogressListContainer';
 
-const todos = [
-  {
-    ID: 'some ID',
-    text: 'Buy Milk',
-    timeStarted: new Date()
-  },
-  {
-    ID: 'some ID 2',
-    text: 'Finish task one',
-    timeStarted: new Date()
-  },
-  {
-    ID: 'some ID 3',
-    text: 'Finish task two because god damn this is a really big ass string',
-    timeStarted: new Date()
-  }
-]
+const store = createStore(todoListReducer)
 
 export default class App extends Component {
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.headerContainer}>
-          <Header text={'My Tasks'} />
-        </View>
-        <View style={styles.tasksRemainingContainer}>
-          <Subtitle text={'3 tasks remaining'} />
-        </View>
-        <View style={styles.hrContainer}>
-          <Hr />
-        </View>
-        <SwipeListView
-            style={styles.todoLists}
-            useFlatList
-            data={todos}
-            renderItem={ ({ item }: SwipeListRenderItem) => (
-              <TodoItem todo={item} />
-            )}
-            renderHiddenItem={ ({ item }: SwipeListRenderItem) => (
-              <TodoItemBack onDelete={() => undefined} onComplete={() => undefined} />
-            )}
-            previewRowKey={''}
-            keyExtractor={(item: Todo) => item.ID}
-            leftOpenValue={75}
-            rightOpenValue={-75}
-        />
-        <View style={styles.buttonContainer}>
-          <Button inverted color={AppColors.addButton} text={'+'} />
-        </View>
-      </View>
+      <Provider store={store}>
+        <InProgressListContainer />
+      </Provider>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: 80,
-    backgroundColor: 'white',
-  },
-  headerContainer: {
-    marginLeft: 50
-  },
-  tasksRemainingContainer: {
-    paddingVertical: 10,
-    marginLeft: 50
-  },
-  hrContainer: {
-    marginLeft: 50,
-    paddingTop: 12
-  },
-  todoLists: {
-  },
-  buttonContainer: {
-    position: 'absolute',
-    bottom: 36,
-    right: 36
-  }
-});
