@@ -1,5 +1,7 @@
 import { todoByID, notTodoByID } from "./todoHelpers";
 import shortID from 'shortid'
+import { format } from "date-fns";
+import { TIME_FORMAT } from "../../common/date";
 
 export interface Todo {
   ID: string;
@@ -10,7 +12,7 @@ export interface Todo {
 
 export interface TodoListState {
   inProgressTodoList: Todo[]
-  completedTodoList: Todo[]
+  completedTodos: Map<string, Todo[]>;
 }
 
 export interface AddTodoAction {
@@ -40,7 +42,7 @@ enum TodoListActions {
 
 export const initialTodoListState: TodoListState = {
   inProgressTodoList: [],
-  completedTodoList: []
+  completedTodos: new Map<string, Todo[]>()
 }
 
 // -- Action Creators --
@@ -95,15 +97,23 @@ function addTodoHelper(state: TodoListState, todo: Todo): TodoListState {
 }
 
 function completeTodoHelper(state: TodoListState, todoID: string): TodoListState {
+  const { completedTodos } = state;
+  
+  const completedTodo = {
+    ...state.inProgressTodoList.find(todoByID(todoID)) as Todo,
+    timeEnded: new Date()
+  }
+  const dateKey = format(completedTodo.timeEnded, TIME_FORMAT)
+
+  if (completedTodos.has(dateKey)) {
+    completedTodos.set(dateKey, [...completedTodos.get(dateKey), completedTodo])
+  } else {
+    completedTodos.set(dateKey, [completedTodo])
+  }
+
   return {
     inProgressTodoList: state.inProgressTodoList.filter(notTodoByID(todoID)),
-    completedTodoList: [
-      ...state.completedTodoList,
-      {
-        ...state.inProgressTodoList.find(todoByID(todoID)) as Todo,
-        timeEnded: new Date()
-      }
-    ]
+    completedTodos: new Map(completedTodos)
   }
 }
 

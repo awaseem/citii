@@ -3,8 +3,7 @@ import { StyleSheet, View, Text } from 'react-native';
 import format from 'date-fns/format'
 import { AppColors } from '../assets/colors';
 import { Todo } from '../data/todos/todolist';
-
-const TIME_FORMAT = 'ddd, MMM D'
+import { TIME_FORMAT } from '../common/date';
 
 interface Props {
   todo: Todo
