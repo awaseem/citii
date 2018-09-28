@@ -1,4 +1,5 @@
 export const AppColors = {
+  appTheme: '#3A2B85',
   headerColor: '#2C2C2C',
   subHeaderColor: '#848484',
   hrColor: '#D3D3D3',
