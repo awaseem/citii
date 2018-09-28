@@ -12,8 +12,7 @@ import React, {Component} from 'react';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { todoListReducer } from './src/data/todos/todoList';
-
-import InProgressListContainer from './src/container/inprogressListContainer';
+import Navigator from './src/container/navigator';
 
 const store = createStore(todoListReducer)
 
@@ -21,7 +20,7 @@ export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <InProgressListContainer />
+        <Navigator />
       </Provider>
     );
   }
