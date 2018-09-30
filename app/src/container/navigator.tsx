@@ -1,15 +1,15 @@
 import React, { Component } from "react";
-import { View, Text, Dimensions, Alert, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Dimensions, StyleSheet, TouchableOpacity } from "react-native";
 import * as Animatable from 'react-native-animatable';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { Button } from "../components/button";
-import InProgressListContainer from "./inprogressListContainer";
 import { AppColors } from "../assets/colors";
 
-interface Props {}
+interface Props {
+  routes: { [routeName: string]: JSX.Element },
+  defaultRouteName: string
+}
 
 interface State {
-  currentView: number
+  currentView: string
 }
 
 Animatable.initializeRegistryWithDefinitions({
@@ -37,34 +37,14 @@ export default class Navigator extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
-      currentView: 0
+      currentView: this.props.defaultRouteName
     }
   }
 
-  viewStack() {
-    return [
-      (
-        <View style={styles.viewContainer}>
-          <InProgressListContainer />
-        </View>
-      ),
-      (
-        <View style={styles.viewContainer}>
-          <InProgressListContainer />
-        </View>
-      ),
-      (
-        <View style={styles.viewContainer}>
-          <InProgressListContainer />
-        </View>
-      )
-    ]
-  }
-
-  async moveViewStack(index: number) {
+  async moveViewStack(routeName: string) {
     const endState = await (this.animateView as any).slideDownCustom(250) as {finished: boolean}
     this.setState({
-      currentView: index
+      currentView: routeName
     })
     if (endState.finished) {
       (this.animateView as any).slideUpCustom(250)
@@ -74,25 +54,13 @@ export default class Navigator extends Component<Props, State> {
   render() {
     return (
       <View style={styles.viewContainer}>
-        <View style={styles.navBarButtonContainer}>
-          <TouchableOpacity onPress={() => this.moveViewStack(1)} style={styles.navBarButton}>
-            <FontAwesome5 size={20} name={'calendar-check'} />
-            <View style={this.state.currentView === 1 ? styles.navBarButtonSelected : undefined}/>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.moveViewStack(0)} style={styles.navBarButton}>
-            <FontAwesome5 size={20} name={'list-alt'} />
-            <View style={this.state.currentView === 0 ? styles.navBarButtonSelected : undefined}/>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.moveViewStack(2)} style={styles.navBarButton}>
-            <FontAwesome5 size={20} name={'building'} />
-            <View style={this.state.currentView === 2 ? styles.navBarButtonSelected : undefined}/>
-          </TouchableOpacity>
-        </View>
         <Animatable.View 
           useNativeDriver 
           ref={(ref: any)=> this.animateView = ref as Animatable.View} 
           style={styles.viewContainer}>
-          {this.viewStack()[this.state.currentView]}
+          <View style={styles.viewContainer}>
+            {this.props.routes[this.state.currentView]}
+          </View>
         </Animatable.View>
       </View>
     )
