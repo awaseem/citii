@@ -7,9 +7,12 @@ import { Header } from "../components/header";
 import { Subtitle } from "../components/subtitle";
 import { Hr } from "../components/hr";
 import { TextItem } from '../components/textItem';
+import { MoveViewStack } from './navigator';
+import { RouteNames } from '../../App';
 
 interface Props {
-  todos: CompletedTodos
+  todos: CompletedTodos,
+  moveViewStack: MoveViewStack
 }
 
 function CompletedDatesListContainer(props: Props) {
@@ -20,7 +23,7 @@ function CompletedDatesListContainer(props: Props) {
         <Header text={'Completed'} />
       </View>
       <View style={styles.tasksRemainingContainer}>
-        <Subtitle text={`${completedTodoDates.length} dates completed`} />
+        <Subtitle text={`${completedTodoDates.length} dates have completed tasks`} />
       </View>
       <View style={styles.hrContainer}>
         <Hr />
@@ -29,7 +32,10 @@ function CompletedDatesListContainer(props: Props) {
           style={styles.completedDatesList}
           data={completedTodoDates}
           renderItem={ ({ item }) => (
-            <TextItem text={item} />
+            <TextItem text={item} onPress={() => props.moveViewStack(RouteNames.completedList, {
+              date: item,
+              todos: props.todos.get(item)
+            })} />
           )}
           keyExtractor={(item) => item}
       />

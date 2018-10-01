@@ -1,16 +1,17 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { AppColors } from '../assets/colors';
 
 interface Props {
-  text: string
+  text: string,
+  onPress?: () => void
 }
 
 export function TextItem(props: Props) {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity onPress={props.onPress} style={styles.container}>
       <Text style={styles.todoText}>{props.text}</Text>
-    </View>
+    </TouchableOpacity>
   )
 }
 

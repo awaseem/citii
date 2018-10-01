@@ -1,15 +1,16 @@
-import React, { Component } from "react";
-import { View, Dimensions, StyleSheet, TouchableOpacity } from "react-native";
+import React, { Component} from "react";
+import { View, Dimensions, StyleSheet } from "react-native";
 import * as Animatable from 'react-native-animatable';
 import { AppColors } from "../assets/colors";
 
 interface Props {
-  routes: { [routeName: string]: JSX.Element },
+  routes: { [routeName: string]: any },
   defaultRouteName: string
 }
 
 interface State {
-  currentView: string
+  currentView: string,
+  propsToPass?: Object
 }
 
 Animatable.initializeRegistryWithDefinitions({
@@ -31,27 +32,32 @@ Animatable.initializeRegistryWithDefinitions({
   }
 });
 
+export type MoveViewStack = (routeName: string, propsToPass?: Object) => Promise<void>
+
 export default class Navigator extends Component<Props, State> {
   animateView: Animatable.View;
 
   constructor(props: Props) {
     super(props)
     this.state = {
-      currentView: this.props.defaultRouteName
+      currentView: this.props.defaultRouteName,
+      propsToPass: {}
     }
   }
 
-  async moveViewStack(routeName: string) {
+  async moveViewStack(routeName: string, propsToPass?: Object) {
     const endState = await (this.animateView as any).slideDownCustom(250) as {finished: boolean}
-    this.setState({
-      currentView: routeName
-    })
     if (endState.finished) {
       (this.animateView as any).slideUpCustom(250)
     }
+    this.setState({
+      currentView: routeName,
+      propsToPass
+    })
   }
 
   render() {
+    const ScreenView = this.props.routes[this.state.currentView]
     return (
       <View style={styles.viewContainer}>
         <Animatable.View 
@@ -59,7 +65,13 @@ export default class Navigator extends Component<Props, State> {
           ref={(ref: any)=> this.animateView = ref as Animatable.View} 
           style={styles.viewContainer}>
           <View style={styles.viewContainer}>
-            {this.props.routes[this.state.currentView]}
+            {React.createElement(
+              ScreenView,
+              {
+                ...this.state.propsToPass,
+                moveViewStack: this.moveViewStack.bind(this)
+              }
+            )}
           </View>
         </Animatable.View>
       </View>

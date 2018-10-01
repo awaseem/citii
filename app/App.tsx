@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import { Provider } from 'react-redux';
+import React, {Component, StatelessComponent, ComponentClass} from 'react';
+import { Provider, ConnectedComponentClass } from 'react-redux';
 import { createStore } from 'redux';
 import { todoListReducer } from './src/data/todos/todoList';
 import Navigator from './src/container/navigator';
@@ -7,19 +7,22 @@ import { NavBar } from './src/container/navBar';
 import InprogressListContainer from './src/container/inprogressListContainer';
 import { View, StyleSheet } from 'react-native';
 import CompletedDatesListContainer from './src/container/completedDatesListContainer';
+import { CompletedListContainer } from './src/container/completedListContainer';
 
 const store = createStore(todoListReducer)
 
-enum RouteNames {
+export enum RouteNames {
   completed = 'calendar-check',
+  completedList = 'completedList',
   inProgress = 'list-alt',
   city = 'building'
 }
 
 const routes = {
-  [RouteNames.completed]: <CompletedDatesListContainer />,
-  [RouteNames.inProgress]: <InprogressListContainer />,
-  [RouteNames.city]: <InprogressListContainer />
+  [RouteNames.completed]: CompletedDatesListContainer,
+  [RouteNames.completedList]: CompletedListContainer,
+  [RouteNames.inProgress]: InprogressListContainer,
+  [RouteNames.city]: InprogressListContainer
 }
 
 interface State {
