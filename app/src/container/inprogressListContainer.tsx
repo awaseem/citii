@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View, AlertIOS, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, AlertIOS} from 'react-native';
 import { connect } from 'react-redux';
 import { SwipeListView } from 'react-native-swipe-list-view';
 
@@ -29,9 +29,9 @@ interface Props {
 function InProgressListContainer(props: Props) {
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.headerContainer}>
+      <View style={styles.headerContainer}>
         <Header text={'Today\'s Tasks'} />
-      </TouchableOpacity>
+      </View>
       <View style={styles.tasksRemainingContainer}>
         <Subtitle text={`${props.todos.length} tasks remaining`} />
       </View>

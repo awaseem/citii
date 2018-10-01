@@ -6,6 +6,7 @@ import Navigator from './src/container/navigator';
 import { NavBar } from './src/container/navBar';
 import InprogressListContainer from './src/container/inprogressListContainer';
 import { View, StyleSheet } from 'react-native';
+import CompletedDatesListContainer from './src/container/completedDatesListContainer';
 
 const store = createStore(todoListReducer)
 
@@ -16,7 +17,7 @@ enum RouteNames {
 }
 
 const routes = {
-  [RouteNames.completed]: <InprogressListContainer/>,
+  [RouteNames.completed]: <CompletedDatesListContainer />,
   [RouteNames.inProgress]: <InprogressListContainer />,
   [RouteNames.city]: <InprogressListContainer />
 }

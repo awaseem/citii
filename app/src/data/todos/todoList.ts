@@ -12,8 +12,10 @@ export interface Todo {
 
 export interface TodoListState {
   inProgressTodoList: Todo[]
-  completedTodos: Map<string, Todo[]>;
+  completedTodos: CompletedTodos;
 }
+
+export type CompletedTodos = Map<string, Todo[]>;
 
 export interface AddTodoAction {
   type: TodoListActions.ADD,
