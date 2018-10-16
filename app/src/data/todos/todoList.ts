@@ -3,6 +3,13 @@ import shortID from 'shortid'
 import { format } from "date-fns";
 import { TIME_FORMAT } from "../../common/date";
 
+export enum TodoListActions {
+  ADD,
+  REMOVE,
+  COMPLETE,
+  SET
+}
+
 export interface Todo {
   ID: string;
   text: string;
@@ -15,7 +22,7 @@ export interface TodoListState {
   completedTodos: CompletedTodos;
 }
 
-export type CompletedTodos = Map<string, Todo[]>;
+export type CompletedTodos = { [key: string]: Todo[] };
 
 export interface AddTodoAction {
   type: TodoListActions.ADD,
@@ -32,19 +39,18 @@ export interface CompleteTodoAction {
   payload: string
 }
 
-export type TodoAction = AddTodoAction | RemoveTodoAction | CompleteTodoAction
+export interface SetTodoAction {
+  type: TodoListActions.SET,
+  payload: TodoListState
+}
+
+export type TodoAction = AddTodoAction | RemoveTodoAction | CompleteTodoAction | SetTodoAction
 
 // -- Constants --
 
-enum TodoListActions {
-  ADD,
-  REMOVE,
-  COMPLETE
-}
-
 export const initialTodoListState: TodoListState = {
   inProgressTodoList: [],
-  completedTodos: new Map<string, Todo[]>()
+  completedTodos: {}
 }
 
 // -- Action Creators --
@@ -74,9 +80,16 @@ export function completeTodo(todoID: string): CompleteTodoAction {
   }
 }
 
+export function setTodo(state: TodoListState): SetTodoAction {
+  return {
+    type: TodoListActions.SET,
+    payload: state
+  }
+}
+
 // -- Reducer -- 
 
-export function todoListReducer(state: TodoListState = initialTodoListState, action: AddTodoAction | RemoveTodoAction | CompleteTodoAction): TodoListState {
+export function todoListReducer(state: TodoListState = initialTodoListState, action: TodoAction): TodoListState {
   switch (action.type) {
     case TodoListActions.ADD:
       return addTodoHelper(state, action.payload)
@@ -84,6 +97,8 @@ export function todoListReducer(state: TodoListState = initialTodoListState, act
       return completeTodoHelper(state, action.payload)
     case TodoListActions.REMOVE:
       return removeTodoHelper(state, action.payload)
+    case TodoListActions.SET:
+      return action.payload
     default:
       return state
   }
@@ -107,15 +122,14 @@ function completeTodoHelper(state: TodoListState, todoID: string): TodoListState
   }
   const dateKey = format(completedTodo.timeEnded, TIME_FORMAT)
 
-  if (completedTodos.has(dateKey)) {
-    completedTodos.set(dateKey, [...completedTodos.get(dateKey), completedTodo])
-  } else {
-    completedTodos.set(dateKey, [completedTodo])
-  }
+  const newCompletedTodos = completedTodos[dateKey] ? [...completedTodos[dateKey], completedTodo] : [completedTodo]
 
   return {
     inProgressTodoList: state.inProgressTodoList.filter(notTodoByID(todoID)),
-    completedTodos: new Map(completedTodos)
+    completedTodos: {
+      ...completedTodos,
+      [dateKey]: newCompletedTodos
+    }
   }
 }
 

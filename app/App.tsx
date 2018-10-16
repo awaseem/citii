@@ -1,6 +1,7 @@
-import React, {Component, StatelessComponent, ComponentClass} from 'react';
-import { Provider, ConnectedComponentClass } from 'react-redux';
-import { createStore } from 'redux';
+import React, {Component} from 'react';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 import { todoListReducer } from './src/data/todos/todoList';
 import Navigator from './src/container/navigator';
 import { NavBar } from './src/container/navBar';
@@ -8,8 +9,14 @@ import InprogressListContainer from './src/container/inprogressListContainer';
 import { View, StyleSheet } from 'react-native';
 import CompletedDatesListContainer from './src/container/completedDatesListContainer';
 import { CompletedListContainer } from './src/container/completedListContainer';
+import { storageMiddleware, getStateFromStore } from './src/data/store/asyncStore';
 
-const store = createStore(todoListReducer)
+const middlewares = [thunk, storageMiddleware]
+
+const store = createStore(todoListReducer, applyMiddleware(...middlewares))
+
+// fetch the current state from the store
+store.dispatch(getStateFromStore() as any)
 
 export enum RouteNames {
   completed = 'calendar-check',
@@ -53,7 +60,7 @@ export default class App extends Component<{}, State> {
       <Provider store={store}>
         <View style={styles.appContainer}>
           <Navigator 
-            ref={(nav) => this.navigator = nav} 
+            ref={(nav) => nav ? this.navigator = nav : undefined } 
             defaultRouteName={RouteNames.city.toString()} 
             routes={routes} 
           />

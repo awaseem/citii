@@ -16,7 +16,7 @@ interface Props {
 }
 
 function CompletedDatesListContainer(props: Props) {
-  const completedTodoDates = Array.from(props.todos.keys());
+  const completedTodoDates = Object.keys(props.todos);
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -34,7 +34,7 @@ function CompletedDatesListContainer(props: Props) {
           renderItem={ ({ item }) => (
             <TextItem text={item} onPress={() => props.moveViewStack(RouteNames.completedList, {
               date: item,
-              todos: props.todos.get(item)
+              todos: props.todos[item]
             })} />
           )}
           keyExtractor={(item) => item}
