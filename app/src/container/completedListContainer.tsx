@@ -39,7 +39,7 @@ function _completedListContainer(props: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 40,
+    marginTop: 60,
     backgroundColor: 'white',
   },
   headerContainer: {

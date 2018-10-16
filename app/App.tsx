@@ -52,6 +52,11 @@ export default class App extends Component<{}, State> {
     return (
       <Provider store={store}>
         <View style={styles.appContainer}>
+          <Navigator 
+            ref={(nav) => this.navigator = nav} 
+            defaultRouteName={RouteNames.city.toString()} 
+            routes={routes} 
+          />
           <NavBar 
             icons={{
               [RouteNames.completed]: this.onPressNavBar(RouteNames.completed),
@@ -59,11 +64,6 @@ export default class App extends Component<{}, State> {
               [RouteNames.city]: this.onPressNavBar(RouteNames.city)
             }}
             selected={this.state.selected}
-          />
-          <Navigator 
-            ref={(nav) => this.navigator = nav} 
-            defaultRouteName={RouteNames.city.toString()} 
-            routes={routes} 
           />
         </View>
       </Provider>

@@ -24,8 +24,9 @@ export function NavBar(props: Props) {
 
 const styles = StyleSheet.create({
   navBarButtonContainer: {
-    marginTop: 45,
-    marginLeft: 25,
+    position: 'absolute',
+    bottom: 36,
+    left: 32,
     flexDirection: 'row'
   },
   navBarButton: {
