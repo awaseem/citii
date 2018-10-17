@@ -14,19 +14,23 @@ interface State {
 }
 
 Animatable.initializeRegistryWithDefinitions({
-  slideDownCustom: {
+  slideOut: {
     from: {
-      translateX: 0
+      translateX: 0,
+      opacity: 1
     },
     to: {
+      opacity: 0,
       translateX: Dimensions.get('window').width
     },
   },
-  slideUpCustom: {
+  slideIn: {
     from: {
-      translateX: Dimensions.get('window').width
+      opacity: 0,
+      translateX: -Dimensions.get('window').width
     },
     to: {
+      opacity: 1,
       translateX: 0
     },
   }
@@ -46,9 +50,9 @@ export default class Navigator extends Component<Props, State> {
   }
 
   async moveViewStack(routeName: string, propsToPass?: Object) {
-    const endState = await (this.animateView as any).slideDownCustom(250) as {finished: boolean}
+    const endState = await (this.animateView as any).slideOut(200) as {finished: boolean}
     if (endState.finished) {
-      (this.animateView as any).slideUpCustom(250)
+      (this.animateView as any).slideIn(200)
     }
     this.setState({
       currentView: routeName,
