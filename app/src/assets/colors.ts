@@ -7,5 +7,6 @@ export const AppColors = {
   buttonText: 'white',
   addButton: '#3A2B85',
   completeButton: '#41D3BD',
-  deleteButton: '#E03535'
+  deleteButton: '#E03535',
+  pointsColor: '#41d3bd'
 }

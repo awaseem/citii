@@ -23,6 +23,10 @@ export function TodoItem(props: Props) {
       <View>
         <Text style={styles.todoText}>{props.todo.text}</Text>
         <Text style={styles.dateText}>{format(props.todo.timeStarted, TIME_FORMAT)}</Text>
+        { props.todo.points ? 
+          <Text style={styles.pointsText}>{`Points earned: ${props.todo.points}`}</Text> : 
+          undefined
+        }
       </View>
     </View>
   )
@@ -51,5 +55,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: AppColors.subHeaderColor
+  },
+  pointsText: {
+    paddingTop: 6,
+    fontSize: 14,
+    fontWeight: '600',
+    color: AppColors.pointsColor
   }
 })
