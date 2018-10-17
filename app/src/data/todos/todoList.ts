@@ -2,6 +2,7 @@ import { todoByID, notTodoByID } from "./todoHelpers";
 import shortID from 'shortid'
 import { format } from "date-fns";
 import { TIME_FORMAT } from "../../common/date";
+import { pointsCalculator } from "../points/pointsCalculator";
 
 export enum TodoListActions {
   ADD,
@@ -15,6 +16,7 @@ export interface Todo {
   text: string;
   timeStarted: Date
   timeEnded?: Date
+  points?: number
 }
 
 export interface TodoListState {
@@ -116,9 +118,14 @@ function addTodoHelper(state: TodoListState, todo: Todo): TodoListState {
 function completeTodoHelper(state: TodoListState, todoID: string): TodoListState {
   const { completedTodos } = state;
   
+  const todo = state.inProgressTodoList.find(todoByID(todoID)) as Todo
+  const timeEnded = new Date()
+  const points = pointsCalculator(todo.text, todo.timeStarted, timeEnded)
+  
   const completedTodo = {
-    ...state.inProgressTodoList.find(todoByID(todoID)) as Todo,
-    timeEnded: new Date()
+    ...todo,
+    timeEnded,
+    points
   }
   const dateKey = format(completedTodo.timeEnded, TIME_FORMAT)
 

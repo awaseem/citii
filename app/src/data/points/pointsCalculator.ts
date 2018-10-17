@@ -13,7 +13,7 @@ export function pointsCalculator(
   text: string, 
   timeStarted: Date, 
   timeEnded: Date, 
-  ranGenerator: (min: number, max: number) => number) {
+  ranGenerator: (min: number, max: number) => number = random) {
   
   const charLength = text.length
   const timeTakenSeconds = differenceInSeconds(timeEnded, timeStarted)
