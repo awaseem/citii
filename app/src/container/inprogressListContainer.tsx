@@ -12,7 +12,7 @@ import { TodoItemBack } from "../components/todoItemBack";
 import { AppColors } from "../assets/colors";
 import { Button } from "../components/button";
 import { Dispatch, bindActionCreators } from 'redux';
-import { PointsAlert } from '../components/pointsAlert';
+import { pointsCalculator } from '../data/points/pointsCalculator';
 
 interface SwipeListRenderItem {
   item: Todo,
@@ -21,55 +21,68 @@ interface SwipeListRenderItem {
 
 interface Props {
   todos: Todo[],
-  recentCompletedTodo?: Todo,
 
   addTodo: (text: string) => void,
   removeTodo: (ID: string) => void,
-  completeTodo: (ID: string) => void
+  completeTodo: (ID: string, timeEnded: Date, points: number) => void
 }
 
-function InProgressListContainer(props: Props) {
-  return (
-    <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Header text={'Today\'s Tasks'} />
+interface State {
+  showPointsAlert: boolean,
+  points: number
+}
+
+class InProgressListContainer extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props)
+  }
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <Header text={'Today\'s Tasks'} />
+        </View>
+        <View style={styles.tasksRemainingContainer}>
+          <Subtitle text={`${this.props.todos.length} tasks remaining`} />
+        </View>
+        <View style={styles.hrContainer}>
+          <Hr />
+        </View>
+        <SwipeListView
+            style={styles.todoLists}
+            useFlatList
+            data={this.props.todos}
+            renderItem={ ({ item }: SwipeListRenderItem) => (
+              <TodoItem todo={item} />
+            )}
+            renderHiddenItem={ ({ item }: SwipeListRenderItem) => (
+              <TodoItemBack 
+                onDelete={() => this.props.removeTodo(item.ID)} 
+                onComplete={() => {
+                  const timeEnded = new Date()
+                  const pointsEarned = pointsCalculator(item.text, item.timeStarted, timeEnded)
+                  this.props.completeTodo(item.ID, timeEnded, pointsEarned)
+                }} 
+              />
+            )}
+            previewRowKey={''}
+            keyExtractor={(item: Todo) => item.ID}
+            leftOpenValue={75}
+            rightOpenValue={-75}
+        />
+        <View style={styles.buttonContainer}>
+          <Button onPress={() => {
+            AlertIOS.prompt(
+              'New Task',
+              'Enter a task you want to accomplish today.',
+              text => text.length > 0 ? this.props.addTodo(text) : undefined
+            );
+          }} inverted color={AppColors.addButton} text={'+'} />
+        </View>
       </View>
-      <View style={styles.tasksRemainingContainer}>
-        <Subtitle text={`${props.todos.length} tasks remaining`} />
-        <PointsAlert recentCompletedTodo={props.recentCompletedTodo} />
-      </View>
-      <View style={styles.hrContainer}>
-        <Hr />
-      </View>
-      <SwipeListView
-          style={styles.todoLists}
-          useFlatList
-          data={props.todos}
-          renderItem={ ({ item }: SwipeListRenderItem) => (
-            <TodoItem todo={item} />
-          )}
-          renderHiddenItem={ ({ item }: SwipeListRenderItem) => (
-            <TodoItemBack 
-              onDelete={() => props.removeTodo(item.ID)} 
-              onComplete={() => props.completeTodo(item.ID)} 
-            />
-          )}
-          previewRowKey={''}
-          keyExtractor={(item: Todo) => item.ID}
-          leftOpenValue={75}
-          rightOpenValue={-75}
-      />
-      <View style={styles.buttonContainer}>
-        <Button onPress={() => {
-          AlertIOS.prompt(
-            'New Task',
-            'Enter a task you want to accomplish today.',
-            text => text.length > 0 ? props.addTodo(text) : undefined
-          );
-        }} inverted color={AppColors.addButton} text={'+'} />
-      </View>
-    </View>
-  );
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -101,8 +114,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state: TodoListState) {
   return {
-    todos: state.inProgressTodoList,
-    recentCompletedTodo: state.recentCompletedTodo
+    todos: state.inProgressTodoList
   }
 }
 

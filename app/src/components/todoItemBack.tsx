@@ -5,6 +5,7 @@ import { AppColors } from '../assets/colors';
 const TIME_FORMAT = 'ddd, MMM D'
 
 interface Props {
+  points?: number
   onComplete: () => void
   onDelete: () => void
 }

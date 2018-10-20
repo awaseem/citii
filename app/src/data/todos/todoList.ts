@@ -22,7 +22,6 @@ export interface Todo {
 export interface TodoListState {
   inProgressTodoList: Todo[]
   completedTodos: CompletedTodos;
-  recentCompletedTodo?: Todo
 }
 
 export type CompletedTodos = { [key: string]: Todo[] };
@@ -39,7 +38,11 @@ export interface RemoveTodoAction {
 
 export interface CompleteTodoAction {
   type: TodoListActions.COMPLETE,
-  payload: string
+  payload: {
+    todoID: string,
+    timeEnded: Date,
+    points: number
+  }
 }
 
 export interface SetTodoAction {
@@ -53,8 +56,7 @@ export type TodoAction = AddTodoAction | RemoveTodoAction | CompleteTodoAction |
 
 export const initialTodoListState: TodoListState = {
   inProgressTodoList: [],
-  completedTodos: {},
-  recentCompletedTodo: undefined
+  completedTodos: {}
 }
 
 // -- Action Creators --
@@ -77,10 +79,14 @@ export function removeTodo(todoID: string): RemoveTodoAction {
   }
 }
 
-export function completeTodo(todoID: string): CompleteTodoAction {
+export function completeTodo(todoID: string, timeEnded: Date, points: number): CompleteTodoAction {
   return {
     type: TodoListActions.COMPLETE,
-    payload: todoID
+    payload: {
+      todoID,
+      timeEnded,
+      points
+    }
   }
 }
 
@@ -98,7 +104,7 @@ export function todoListReducer(state: TodoListState = initialTodoListState, act
     case TodoListActions.ADD:
       return addTodoHelper(state, action.payload)
     case TodoListActions.COMPLETE:
-      return completeTodoHelper(state, action.payload)
+      return completeTodoHelper(state, action.payload.todoID, action.payload.timeEnded, action.payload.points)
     case TodoListActions.REMOVE:
       return removeTodoHelper(state, action.payload)
     case TodoListActions.SET:
@@ -117,13 +123,11 @@ function addTodoHelper(state: TodoListState, todo: Todo): TodoListState {
   }
 }
 
-function completeTodoHelper(state: TodoListState, todoID: string): TodoListState {
+function completeTodoHelper(state: TodoListState, todoID: string, timeEnded: Date, points: number): TodoListState {
   const { completedTodos } = state;
   
   const todo = state.inProgressTodoList.find(todoByID(todoID)) as Todo
-  const timeEnded = new Date()
-  const points = pointsCalculator(todo.text, todo.timeStarted, timeEnded)
-  
+
   const completedTodo = {
     ...todo,
     timeEnded,
@@ -138,8 +142,7 @@ function completeTodoHelper(state: TodoListState, todoID: string): TodoListState
     completedTodos: {
       ...completedTodos,
       [dateKey]: newCompletedTodos
-    },
-    recentCompletedTodo: completedTodo
+    }
   }
 }
 

@@ -1,11 +1,10 @@
 import React from "react";
-import { View, StyleSheet, Text, TouchableWithoutFeedback, Alert } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import * as Animatable from 'react-native-animatable';
 import { AppColors } from "../assets/colors";
-import { Todo } from "../data/todos/todoList";
 
 interface Props {
-  recentCompletedTodo?: Todo
+  points?: number
 }
 
 interface State {
@@ -21,15 +20,20 @@ export class PointsAlert extends React.Component<Props,State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.recentCompletedTodo != this.props.recentCompletedTodo) {
+    if (prevProps.points !== this.props.points) {
       this.setState({
         show: true
       })
+      setTimeout(() => {
+        this.setState({
+          show: false
+        })
+      }, 1000)
     }
   }
 
   render () {
-    const { recentCompletedTodo } = this.props
+    const { points } = this.props
     return (
       <View>
         {this.state.show ? 
@@ -37,7 +41,7 @@ export class PointsAlert extends React.Component<Props,State> {
             animation={'bounceIn'}
             useNativeDriver>
             <View style={styles.pointsContainer}>
-              <Text style={styles.pointsText}>{`Points earned ${recentCompletedTodo && recentCompletedTodo.points}`}</Text>
+              <Text style={styles.pointsText}>{`Points earned ${points}`}</Text>
             </View>
           </Animatable.View> : 
           undefined
