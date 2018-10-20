@@ -12,6 +12,7 @@ import { TodoItemBack } from "../components/todoItemBack";
 import { AppColors } from "../assets/colors";
 import { Button } from "../components/button";
 import { Dispatch, bindActionCreators } from 'redux';
+import { PointsAlert } from '../components/pointsAlert';
 
 interface SwipeListRenderItem {
   item: Todo,
@@ -20,6 +21,7 @@ interface SwipeListRenderItem {
 
 interface Props {
   todos: Todo[],
+  recentCompletedTodo?: Todo,
 
   addTodo: (text: string) => void,
   removeTodo: (ID: string) => void,
@@ -34,6 +36,7 @@ function InProgressListContainer(props: Props) {
       </View>
       <View style={styles.tasksRemainingContainer}>
         <Subtitle text={`${props.todos.length} tasks remaining`} />
+        <PointsAlert recentCompletedTodo={props.recentCompletedTodo} />
       </View>
       <View style={styles.hrContainer}>
         <Hr />
@@ -79,6 +82,7 @@ const styles = StyleSheet.create({
     marginLeft: 50
   },
   tasksRemainingContainer: {
+    flexDirection: 'row',
     paddingVertical: 10,
     marginLeft: 50
   },
@@ -97,7 +101,8 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state: TodoListState) {
   return {
-    todos: state.inProgressTodoList
+    todos: state.inProgressTodoList,
+    recentCompletedTodo: state.recentCompletedTodo
   }
 }
 

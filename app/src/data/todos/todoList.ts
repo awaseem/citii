@@ -22,6 +22,7 @@ export interface Todo {
 export interface TodoListState {
   inProgressTodoList: Todo[]
   completedTodos: CompletedTodos;
+  recentCompletedTodo?: Todo
 }
 
 export type CompletedTodos = { [key: string]: Todo[] };
@@ -52,7 +53,8 @@ export type TodoAction = AddTodoAction | RemoveTodoAction | CompleteTodoAction |
 
 export const initialTodoListState: TodoListState = {
   inProgressTodoList: [],
-  completedTodos: {}
+  completedTodos: {},
+  recentCompletedTodo: undefined
 }
 
 // -- Action Creators --
@@ -136,7 +138,8 @@ function completeTodoHelper(state: TodoListState, todoID: string): TodoListState
     completedTodos: {
       ...completedTodos,
       [dateKey]: newCompletedTodos
-    }
+    },
+    recentCompletedTodo: completedTodo
   }
 }
 
