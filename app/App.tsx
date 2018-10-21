@@ -10,6 +10,7 @@ import { View, StyleSheet } from 'react-native';
 import CompletedDatesListContainer from './src/container/completedDatesListContainer';
 import { CompletedListContainer } from './src/container/completedListContainer';
 import { storageMiddleware, getStateFromStore } from './src/data/store/asyncStore';
+import { CityContainer } from './src/container/cityContainer';
 
 const middlewares = [thunk, storageMiddleware]
 
@@ -29,7 +30,7 @@ const routes = {
   [RouteNames.completed]: CompletedDatesListContainer,
   [RouteNames.completedList]: CompletedListContainer,
   [RouteNames.inProgress]: InprogressListContainer,
-  [RouteNames.city]: InprogressListContainer
+  [RouteNames.city]: CityContainer
 }
 
 interface State {
@@ -61,7 +62,7 @@ export default class App extends Component<{}, State> {
         <View style={styles.appContainer}>
           <Navigator 
             ref={(nav) => nav ? this.navigator = nav : undefined } 
-            defaultRouteName={RouteNames.city.toString()} 
+            defaultRouteName={RouteNames.inProgress.toString()} 
             routes={routes} 
           />
           <NavBar 
