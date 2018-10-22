@@ -62,7 +62,7 @@ export default class App extends Component<{}, State> {
         <View style={styles.appContainer}>
           <Navigator 
             ref={(nav) => nav ? this.navigator = nav : undefined } 
-            defaultRouteName={RouteNames.inProgress.toString()} 
+            defaultRouteName={RouteNames.city.toString()} 
             routes={routes} 
           />
           <NavBar 
