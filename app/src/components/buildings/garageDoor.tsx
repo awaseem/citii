@@ -14,7 +14,7 @@ export function GarageDoor(props: Props) {
         x={props.x}
         y={props.y}
         width="50"
-        height="130"
+        height="55"
         strokeWidth="2"
         stroke={AppColors.garageDoorBorderColor}
         fill={AppColors.garageDoorColor}

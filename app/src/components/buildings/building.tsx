@@ -23,29 +23,39 @@ import Svg,{
 } from 'react-native-svg';
 import React from 'react';
 import { View } from 'react-native';
+import tinycolor from 'tinycolor2'
 import { Window } from './windows';
 import { FlatRoof } from './flatRoof';
 import { Separator } from './separator';
 import { GarageDoor } from './garageDoor';
 import { Door } from './door';
+import { Bricks } from './bricks';
+
+interface Props {
+  stories: number
+}
 
 export function Building() {
   return (
     <View>
-      <Svg height={150} width={150}>
+      <Svg height={240} width={150}>
         <Rect
-          x="0"
+          x="5"
           y="0"
-          width="150"
-          height="150"
+          width="140"
+          height="250"
           fill="#DB4C40" 
         />
+        <Bricks minX={20} maxX={100} minY={20} maxY={200} numberOfBricks={6} buildingColor={'#DB4C40'} />
         <FlatRoof x={0} y={0} />
         <Window x={20} y={30} />
         <Window x={100} y={30} />
         <Separator x={0} y={80} />
-        <GarageDoor x={20} y={105} />
-        <Door x={100} y={115} />
+        <Window x={20} y={105} />
+        <Window x={100} y={105} />
+        <Separator x={0} y={155} />
+        <GarageDoor x={20} y={190} />
+        <Door x={100} y={205} />
       </Svg>
     </View>
   )
